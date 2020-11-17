@@ -8,7 +8,7 @@ spec:
     - name: revision
       value: master 
     - name: url
-      value: https://github.ibm.com/cpat/cp4a-gitops-tekton-infra.git
+      value: https://github.com/ogaye-ibm/dillards-infra.git
 
 ---
 apiVersion: tekton.dev/v1alpha1
@@ -21,5 +21,5 @@ spec:
       - name: revision
         value: master
       - name: url
-        value: https://github.ibm.com/cpat/cp4a-gitops-tekton-argocd-nodejs.git
+        value: https://github.com/ogaye-ibm/dillards-springboot.git
     
