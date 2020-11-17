@@ -1,0 +1,19 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  # Keep in mind that this name must match the name of the binding in the event listener YAML
+  name: cp4a-trigger-binding # EDIT AS NEEDED
+spec:
+  params:
+    - name: gitrevision
+      value: $(body.repository.default_branch)
+    - name: gitrepositoryurl
+      value: $(body.repository.clone_url)
+    - name: contenttype
+      value: $(header.Content-Type)
+    - name: app-name
+      value: $(body.repository.name)
+    - name: pusher-email
+      value: $(body.pusher.email)
+    - name: pusher-name
+      value: $(body.pusher.name)

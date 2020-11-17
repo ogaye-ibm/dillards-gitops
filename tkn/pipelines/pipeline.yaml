@@ -1,0 +1,33 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: cp4a-nodejs-pipeline
+spec:
+  resources:
+    - name: source
+      type: git
+    - name: infra
+      type: git
+  tasks:
+    - name: build
+      taskRef:
+        name: cp4a-task-build
+      resources:
+        inputs:
+          - name: source
+            resource: source
+      params:
+        - name: APP_NAME
+          value: node-app
+    - name: deploy
+      taskRef:
+        name: cp4a-task-deploy
+      resources:
+        inputs:
+          - name: infra
+            resource: infra
+      params:
+        - name: APP_NAME
+          value: node-app
+      runAfter:
+        - build

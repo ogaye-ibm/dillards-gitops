@@ -1,0 +1,11 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: cp4a-git-infra #EDIT AS NEEDED
+spec:
+  type: git
+  params:
+    - name: revision
+      value: master #EDIT AS NEEDED
+    - name: url
+      value: https://github.ibm.com/cpat/cp4a-gitops-tekton-pipeline # Example https://github.ibm.com/cp4a-gitops-tekton-pipeline

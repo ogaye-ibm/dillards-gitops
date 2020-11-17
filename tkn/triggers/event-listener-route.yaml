@@ -1,0 +1,18 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: cp4a-el-route # EDIT AS NEEDED
+  labels:
+    app.kubernetes.io/managed-by: EventListener
+    app.kubernetes.io/part-of: Triggers
+    eventlistener: cp4a-event-listener # EDIT AS NEEDED
+spec:
+  to:
+    kind: Service
+    name: el-cp4a-event-listener # EDIT AS NEEDED
+    weight: 100
+  port:
+    targetPort: http-listener
+  tls:
+    termination: edge
+  wildcardPolicy: None

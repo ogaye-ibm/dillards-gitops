@@ -1,0 +1,71 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: cp4a-task-deploy
+spec:
+  params:
+    - name: MANIFEST_DIR
+      description: The directory that contains yaml manifests
+      default: deployment/ocp
+    - name: IMAGE_REGISTRY
+      default: image-registry.openshift-image-registry.svc:5000/$NAMESPACE
+    - name: APP_NAME
+    - name: TOOL_IMAGE
+      default: docker.io/csantanapr/helm-kubectl-curl-git-jq-yq
+  resources:
+    inputs:
+    - name: infra
+      type: git
+  steps:
+    - name: update-manifests
+      image: $(inputs.params.TOOL_IMAGE)
+      workingDir: /workspace/infra
+      command: ["/bin/bash"]
+      args:
+      - -c
+      - |
+          set -eu
+          echo Copying deployment manifest templates to app source code...
+          pwd
+          ls -l
+          echo "----------------------"
+          ls -l ../
+          echo "================" 
+          cd $(inputs.params.MANIFEST_DIR)
+          echo Updating deployment manifest...
+          echo old value:
+          cat deployment.yaml | yq r - 'spec.template.spec.containers[0].image'
+          echo replacing with new value:
+          NEW_IMAGE_ID="$(inputs.params.IMAGE_REGISTRY)/$(inputs.params.APP_NAME):latest"
+          NEW_IMAGE_ID="$(echo $NEW_IMAGE_ID | sed s/\$NAMESPACE/$NAMESPACE/)"
+          echo $NEW_IMAGE_ID
+          yq w -i deployment.yaml 'spec.template.spec.containers[0].image' "$NEW_IMAGE_ID"
+          echo verifying new value
+          yq r deployment.yaml 'spec.template.spec.containers[0].image'
+          cat deployment.yaml
+      env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+
+    - name: apply-manifests
+      image: quay.io/openshift/origin-cli:latest
+      command: ["/bin/bash", "-c"]
+      workingDir: /workspace/infra/
+      args:
+      - |-
+        set -e
+        echo ------------------ DEPLOY ------------------
+        pwd
+        ls -l
+        cat $(inputs.params.MANIFEST_DIR)/deployment.yaml
+        echo --------------------------------------------
+        echo Applying manifests in $(inputs.params.MANIFEST_DIR) directory
+        oc apply -f $(inputs.params.MANIFEST_DIR)
+        echo ------------------- END --------------------
+  volumes:
+  - name: varlibcontainers
+    emptyDir: {}
+  - name: m2-repository
+    emptyDir: {}

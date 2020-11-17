@@ -1,0 +1,45 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: cp4a-trigger-template
+spec:
+  params:
+    - name: gitrevision
+      description: The git revision
+      default: master
+    - name: gitrepositoryurl
+      description: The git repository url
+    - name: pusher-email
+      description: The e-mail address of the person who pushed
+    - name: pusher-name
+      description: The username of the person who pushed
+    - name: app-name
+      description: The app name will be used as the image name
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1alpha1
+      kind: PipelineRun
+      metadata:
+        generateName: cp4a-pipeline-node-build-deploy-run-
+      spec:
+        params:
+          - name: GIT_EMAIL
+            value: $(params.pusher-email)
+          - name: GIT_NAME
+            value: $(params.pusher-name)
+          - name: APP_NAME
+            value: $(params.app-name)
+        pipelineRef:
+          name: cp4a-pipeline-node-build-deploy
+        resources: # Add resources as necessary for your target pipeline here
+          - name: cp4a-git-infra # This pipeline resource should already exist in your cluster
+            resourceRef:
+              name: cp4a-git-infra
+          - name: cp4a-git # This pipeline resource will be created from the Github webhook
+            resourceSpec:
+              type: git
+              params:
+                - name: revision
+                  value: $(params.gitrevision) # This value will be filled in from the webhook payload
+                - name: url
+                  value: $(params.gitrepositoryurl) # This value will be filled in from the webhook payload
+        serviceAccountName: pipeline

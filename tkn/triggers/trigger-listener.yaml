@@ -1,0 +1,15 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: cp4a-event-listener # EDIT AS NEEDED
+spec:
+  serviceAccountName: pipeline
+  triggers:
+    - name: default-trigger
+      bindings:
+        - name: cp4a-trigger-binding # EDIT AS NEEDED
+      template:
+        name: cp4a-trigger-template # EDIT AS NEEDED
+      interceptors:
+        - cel:
+            filter: "header.match('X-GitHub-Event', 'push') && body.ref == 'refs/heads/master'"

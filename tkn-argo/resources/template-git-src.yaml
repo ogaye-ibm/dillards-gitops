@@ -1,0 +1,11 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: git-src #EDIT AS NEEDED
+spec:
+  type: git
+  params:
+    - name: revision
+      value: master #EDIT AS NEEDED
+    - name: url
+      value: https://github.ibm.com/cpat/cp4a-tutorial-tekton-argocd-code #EDIT AS NEEDED

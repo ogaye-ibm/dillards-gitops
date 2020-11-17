@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: cp4a-git-infra 
+spec:
+  type: git
+  params:
+    - name: revision
+      value: master 
+    - name: url
+      value: https://github.ibm.com/cpat/cp4a-gitops-tekton-infra.git
+
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+    name: cp4a-git
+spec:
+    type: git
+    params:
+      - name: revision
+        value: master
+      - name: url
+        value: https://github.ibm.com/cpat/cp4a-gitops-tekton-argocd-nodejs.git
+    
