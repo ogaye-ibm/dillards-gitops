@@ -1,0 +1,7 @@
+apiVersion: tekton.dev/v1alpha1
+kind: TaskRun
+metadata:
+  name: simple-taskrun
+spec:
+  taskRef:
+    name: simple-task
