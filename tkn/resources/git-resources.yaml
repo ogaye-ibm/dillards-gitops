@@ -6,9 +6,9 @@ spec:
   type: git
   params:
     - name: revision
-      value: master 
+      value: main  #master
     - name: url
-      value: https://github.ibm.com/cpat/cp4a-tkn-springboot-infra.git
+      value: https://github.com/ogaye-ibm/dillards-infra.git
 
 ---
 apiVersion: tekton.dev/v1alpha1
@@ -19,8 +19,7 @@ spec:
     type: git
     params:
       - name: revision
-        value: master
+        value: main #master
       - name: url
-        #value: https://github.ibm.com/cpat/cp4a-ocp-liberty-certs-poc.git
-        value: https://github.ibm.com/cpat/cp4a-ocp-liberty-certs-poc.git
+        value: https://github.com/ogaye-ibm/dillards-springboot.git
     

@@ -8,7 +8,7 @@ spec:
       description: The location of the buildah builder image.
       name: BUILDER_IMAGE
       type: string
-    - default: ./back-end/spring-app/Dockerfile
+    - default: ./Dockerfile
       description: Path to the Dockerfile to build.
       name: DOCKERFILE
       type: string
@@ -34,7 +34,7 @@ spec:
   steps:
     - name: build
       image: $(inputs.params.BUILDER_IMAGE)
-      workingDir: /workspace/source/back-end/spring-app
+      workingDir: /workspace/source/
       command: ["/bin/bash"]
       args:
         - -c
@@ -45,6 +45,8 @@ spec:
           echo =======================================
           NEW_IMAGE_ID="$(inputs.params.IMAGE_REGISTRY)/$(inputs.params.APP_NAME):latest"
           echo "Building Image $NEW_IMAGE_ID"
+          ls -l
+          pwd
           echo ===================================
           buildah bud --tls-verify="$(inputs.params.TLSVERIFY)" --layers -f "$DOCKERFILE" -t "$NEW_IMAGE_ID" "$(inputs.params.CONTEXT)"
           echo "Pushing Image $NEW_IMAGE_ID"
