@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
-  name: cp4a-nodejs-pipeline
+  name: cp4a-springboot-pipeline
 spec:
   resources:
     - name: source
@@ -18,7 +18,7 @@ spec:
             resource: source
       params:
         - name: APP_NAME
-          value: node-app
+          value: helloboot
     - name: deploy
       taskRef:
         name: cp4a-task-deploy
@@ -28,6 +28,6 @@ spec:
             resource: infra
       params:
         - name: APP_NAME
-          value: node-app
+          value: helloboot
       runAfter:
         - build

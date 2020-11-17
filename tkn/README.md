@@ -29,7 +29,7 @@ Tekton Pipelines
 
 # Run the pipeline
 ```bash
-    tkn pipeline start cp4a-nodejs-pipeline --showlog \
+    tkn pipeline start cp4a-springboot-pipeline --showlog \
     -r source=cp4a-git \
     -r infra=cp4a-git-infra \
     -s pipeline

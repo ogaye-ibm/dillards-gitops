@@ -8,7 +8,7 @@ spec:
       description: The location of the buildah builder image.
       name: BUILDER_IMAGE
       type: string
-    - default: ./Dockerfile
+    - default: ./back-end/spring-app/Dockerfile
       description: Path to the Dockerfile to build.
       name: DOCKERFILE
       type: string
@@ -34,7 +34,7 @@ spec:
   steps:
     - name: build
       image: $(inputs.params.BUILDER_IMAGE)
-      workingDir: /workspace/source
+      workingDir: /workspace/source/back-end/spring-app
       command: ["/bin/bash"]
       args:
         - -c
